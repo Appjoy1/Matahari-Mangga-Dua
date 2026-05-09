@@ -1,0 +1,71 @@
+{
+  "entities": {
+    "MenuItem": {
+      "title": "Menu Item",
+      "description": "A food or drink item on the menu",
+      "type": "object",
+      "properties": {
+        "category": { "type": "string" },
+        "name": { "type": "string" },
+        "price": { "type": "string" },
+        "desc": { "type": "string" },
+        "image": { "type": "string" }
+      },
+      "required": ["category", "name", "price", "image"]
+    },
+    "Table": {
+      "title": "Table",
+      "description": "A physical table in the restaurant",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string", "enum": ["small", "medium", "large"] },
+        "capacity": { "type": "integer" },
+        "status": { "type": "string", "enum": ["available", "occupied", "booked"] },
+        "x": { "type": "string" },
+        "y": { "type": "string" }
+      },
+      "required": ["id", "type", "capacity", "status", "x", "y"]
+    },
+    "Reservation": {
+      "title": "Reservation",
+      "description": "A booking made by a customer",
+      "type": "object",
+      "properties": {
+        "tableId": { "type": "string" },
+        "date": { "type": "string" },
+        "time": { "type": "string" },
+        "userName": { "type": "string" },
+        "userPhone": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["tableId", "date", "time", "userName", "userPhone", "createdAt"]
+    },
+    "Setting": {
+      "title": "Global Setting",
+      "description": "Application wide settings",
+      "type": "object",
+      "properties": {
+        "menuPdfUrl": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/menu_items/{itemId}": {
+      "schema": "MenuItem",
+      "description": "Collections of dishes and drinks"
+    },
+    "/tables/{tableId}": {
+      "schema": "Table",
+      "description": "Restaurant floor layout"
+    },
+    "/reservations/{resId}": {
+      "schema": "Reservation",
+      "description": "Customer bookings"
+    },
+    "/settings/{settingId}": {
+      "schema": "Setting",
+      "description": "Config parameters"
+    }
+  }
+}

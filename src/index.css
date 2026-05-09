@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #154212;
+  --color-primary-container: #2d5a27;
+  --color-on-primary: #ffffff;
+  --color-primary-fixed: #bcf0ae;
+  --color-primary-fixed-dim: #a1d494;
+  
+  --color-background: #f9faf2;
+  --color-on-background: #191c18;
+  
+  --color-surface: #f9faf2;
+  --color-surface-dim: #d9dbd3;
+  --color-surface-container-low: #f3f4ed;
+  --color-surface-container: #edefe7;
+  --color-surface-container-high: #e7e9e1;
+  --color-surface-container-highest: #e2e3dc;
+  --color-surface-container-lowest: #ffffff;
+  
+  --color-on-surface: #191c18;
+  --color-on-surface-variant: #42493e;
+  
+  --color-outline: #72796e;
+  --color-outline-variant: #c2c9bb;
+
+  --font-display: "Playfair Display", serif;
+  --font-secondary: "Montserrat", sans-serif;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+
+  --radius-lg: 2rem;
+  --radius-xl: 3rem;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-on-background font-sans antialiased;
+  }
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.glass-dark {
+  background: rgba(21, 66, 18, 0.2);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.organic-shape {
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+}

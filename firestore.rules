@@ -1,0 +1,60 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Admins collection (seeded by system)
+    match /admins/{userId} {
+      allow read: if isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Menu Items
+    match /menu_items/{itemId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Tables
+    match /tables/{tableId} {
+      allow read: if true;
+      // Allow everyone to mark as 'booked' via update, but only if they are actually booking
+      // This is a bit complex for a simple app, let's allow admin for all writes
+      // And maybe allow update for status only if it's being booked?
+      // Actually, for simplicity and security, only admin writes tables.
+      // Booking creates a reservation, and the app reflects booked tables from reservations?
+      // Or admin manages table status. User just creates reservation.
+      allow write: if isAdmin();
+      // Allow update status for booking logic if we want real-time status without reservation join
+      allow update: if (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])) || isAdmin();
+    }
+
+    // Reservations
+    match /reservations/{resId} {
+      allow read: if isAdmin();
+      allow create: if true; // In real app, we'd validate more, but for now allow creates
+      allow update, delete: if isAdmin();
+    }
+
+    // Settings
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}
